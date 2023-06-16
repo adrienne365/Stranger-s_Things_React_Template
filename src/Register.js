@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+// v18 doesn't need this
 import { NewUser } from './fetches.js';
 
-export const Register= ({username, setUsername, password, setPassword, token, setToken}) => {
+
+export const Register= ({username, setUsername, password, setPassword, token
+//no need for setToken because its already happening in the fetch request
+}) => {
     async function handleUserRegistration(event) {  
       event.preventDefault();
-      await NewUser (username, password);  
-        console.log(username, password)
-        }
-        
-// function registerUserFunc() {
+      await NewUser (username, password, token);
+     return (token) }
+
         return (
             <form>
                 <input type="text"
                         name="username"
+                        id="username"
                         placeholder="Username"
                         value={username}
                         required                            
@@ -20,6 +23,7 @@ export const Register= ({username, setUsername, password, setPassword, token, se
                 </input>
                     <input type="password"
                            name="password"
+                           id="password"
                            placeholder="Password"
                            minLength="5"
                            maxLength="20"
@@ -30,26 +34,16 @@ export const Register= ({username, setUsername, password, setPassword, token, se
                            </input>
                     <input type="password"
                            name="confirmPassword"
+                           id="confirmPassword"
                            placeholder="Confirm Password"
                            minLength="5"
                            maxLength="20"
-                          //  value={password}
+                           value={password}
                            required
-                           autoComplete="off"
-                           onChange={e => setPassword(e.target.value)}>
+                           autoComplete="off">
                            </input>
                     <button onClick={handleUserRegistration} type="submit">Register Me</button>
                </form>
             )
-        // }
-        
-    return (
-      <div className="register">
-        <h2>Register Here</h2>
-        {/* { registerUserFunc() } */}
-      </div>
-    )
   }  
-
-  // export { registerUserFunc };
   
