@@ -6,6 +6,7 @@ import { Register } from './Register.js';
 import { LoginFunc } from './Login.js';
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from './fetches.js';
+import { makePost} from './Posts'
 
 const Home= (props) => {
   return (
@@ -31,13 +32,6 @@ const Profile= (props) => {
   )
 }
 
-// const Login= (props) => {
-//   return (
-//     <div classname="login">
-//       <h2>Welcome Back!</h2>
-//     </div>
-//   )
-// }
 
 function App() {
 const [posts, setPosts] = useState([]);
@@ -75,13 +69,31 @@ return (
               <Home />
             </Route>
             <Route exact path='/post'>
+            { // this section breaks out of react into js
+                //the (post. could be called anything as long as it matches the following
+                //.title, .id, .description etc, but posts.map has to match the
+                //hard-coded key in the object being mapped over
+                posts.map(post => {
+                 return (<div key={post._id}>
+                   <h3>{post.title}</h3>
+                   <div>{post.description}</div>
+                   <div>{post.price}</div>
+                   </div>
+                   )})
+                   }
               <Post />
             </Route>
             <Route exact path='/profile'>
               <Profile />
             </Route>
             <Route exact path='/login'>
-              <LoginFunc />
+{/* //passing in username and set username same w props to login function */}
+              <LoginFunc
+              username={username}
+              setUsername={setUsername}
+              password={password}
+              setPassword={setPassword}
+              />
             </Route>
             <Route exact path='/register'>
               <Register 
@@ -93,19 +105,6 @@ return (
                 setToken={setToken}/>
             </Route> 
         </div>
-
-       { // this section breaks out of react into js
-       //the (post. could be called anything as long as it matches the following
-       //.title, .id, .description etc, but posts.map has to match the
-       //hard-coded key in the object being mapped over
-       posts.map(post => {
-        return (<div key={post.id}>
-          <h3>{post.title}</h3>
-          <div>{post.description}</div>
-          </div>
-          )})
-          }
-
   </main>
   </BrowserRouter>
   );

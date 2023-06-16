@@ -59,3 +59,11 @@
     text-decoration: underline;
     color: rgb(43, 19, 120);
 }
+
+.Logout {
+    padding-left: 475px;
+    padding-top: 70px;
+    font-size: 10pt;
+    text-decoration: underline;
+    color: white;
+}
