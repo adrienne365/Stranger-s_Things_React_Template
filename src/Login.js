@@ -1,34 +1,41 @@
-// import React, { useState } from 'react';
+import { useState } from 'react';
 import { login } from './fetches.js';
-// import { Register } from './Register.js';
-import { } from './App.js';
 
-export const LoginFunc= ({username, setUsername, password, setPassword}) => {
-    async function handleLogin(event) {  
-        event.preventDefault();
-        await login (username, password);  
-        
-    }
+export const LoginFunc= () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [authenticated, setAuthenticated] = useState(localStorage.getItem(localStorage.getItem("authenticated")|| false));
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const users = [{ username, password }];
+    const handleLogin = (event) => {
+      event.preventDefault(event)
+     login (username, password, authenticated); 
+      const account = users.find((user) => user.username === username);
+      if (account && account.password === password) {
+          setAuthenticated(true)
+          setIsLoggedIn(true)
+          localStorage.setItem("authenticated", true);
 
-        return ( 
-            <div className="login">
-            <h2>Welcome Back!</h2>
-        <form>
-    <input type="text"
-            name="username"
-            placeholder="Username"
-            value={username}
-            required
-            onChange={e => setUsername(e.target.value)}>
-    </input> 
-        <input type="password"
-               name="password"
-               placeholder="Password"
-               value={password}
-               required
-               autoComplete="off"
-               onChange={e => setPassword(e.target.value)}>
-               </input>
+      }
+    };
+    
+    return (
+      <div>
+        <p>Welcome Back!</p>
+        <form onSubmit={handleLogin}>
+        <input
+          type="text"
+          name="Username"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          name="Password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <button onClick={handleLogin}>Login</button>
    </form>
    </div>

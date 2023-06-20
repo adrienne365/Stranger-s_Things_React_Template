@@ -50,13 +50,29 @@ const NewUser = async (username, password) => {
     } catch (err) {
       alert(err.error.message);
       console.error(err);
+      <p className="login-fail">Please Register</p>
+    }
+  }
+
+  const myData = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/users/me`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+      });
+      const result = await response.json();
+      console.log(result);
+      return result
+    } catch (err) {
+      console.error(err);
     }
   }
 
   const makePost = async () => {
-
     try {
-      const response = await fetch(`${BASE_URL}/posts`, {
+      const response = await fetch(`${BASE_URL}users/posts`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +95,9 @@ const NewUser = async (username, password) => {
     }
   }
 
-
+  
   export { NewUser };
   export { login };
+  export { makePost };
+  export { myData };
   export { BASE_URL };

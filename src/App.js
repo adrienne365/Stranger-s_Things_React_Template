@@ -1,43 +1,40 @@
 import "./App.css";
-// import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
-// import { NewUser } from './fetches.js';
 import { Register } from './Register.js';
 import { LoginFunc } from './Login.js';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BASE_URL } from './fetches.js';
-import { makePost} from './Posts'
-
-const Home= (props) => {
-  return (
-    <div className="home">
-      <h2>Welcome Home!</h2>
-    </div>
-  )
-}
-
-const Post= (props) => {
-  return (
-    <div className="post">
-      <h2>Posted Items</h2>
-    </div>
-  )
-}
-
-const Profile= (props) => {
-  return (
-    <div className="profile">
-      <h2>Your Profile</h2>
-    </div>
-  )
-}
+import { Profile, Post } from './Profile'
 
 
 function App() {
-const [posts, setPosts] = useState([]);
-const [username, setUsername] = useState("");
-const [password, setPassword] = useState("");
-const [token, setToken] = useState("");
+  const [posts, setPosts] = useState([]);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [token, setToken] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  const Home= (props) => {
+    const [authenticated, setAuthenticated] = useState(null);
+    useEffect(() => {
+      const isLoggedIn = localStorage.getItem("authenticated");
+      if (isLoggedIn) {
+        setAuthenticated(isLoggedIn);
+        setIsLoggedIn(true);
+      }
+    }, []);
+  
+    if (!authenticated) {
+      return < Link replace to="/login" />;
+    } else {
+    return (
+      <div className="home">
+        <h2>Welcome Home!</h2>
+      </div>
+    )
+  }
+  }
 
 useEffect (() => {
     const fetchPosts = async() => {
@@ -55,20 +52,17 @@ return (
     <main>
     <div className="App">
       <h1>Stranger's Things</h1>
-      <h1 className="Logout">Log Out</h1>
     </div>
         <div className="Navbar">
           <Link id="navHome" to='/home'>HOME</Link>
-          <Link id="navPosts" to='/post'>POSTS</Link>
-          <Link id="navProfile" to='/profile'>PROFILE</Link>
           <Link id="navRegister" to='/Register'>REGISTER</Link>
-          <Link id="navLogin" to='/Login'>LOGIN</Link>
+          <Link id="navLogin" to='/Login'>LOG IN</Link>
         </div>
         <div>
             <Route exact path='/home'>
-              <Home />
-            </Route>
-            <Route exact path='/post'>
+              <div>
+                <h2>Register or Log in to Create a Post</h2>
+              </div>
             { // this section breaks out of react into js
                 //the (post. could be called anything as long as it matches the following
                 //.title, .id, .description etc, but posts.map has to match the
@@ -81,19 +75,27 @@ return (
                    </div>
                    )})
                    }
-              <Post />
+            <Home />
             </Route>
+            
+            
+            {/* <Route exact path='/post'> */}
             <Route exact path='/profile'>
-              <Profile />
+              <Profile/>
+             { <button id="logout">Log Out</button> }
+            <div>
+            <Link id="navProfile" to='/profile'>PROFILE</Link>
+            </div>
+              {/* <Post /> */}
             </Route>
+            
             <Route exact path='/login'>
 {/* //passing in username and set username same w props to login function */}
               <LoginFunc
               username={username}
               setUsername={setUsername}
               password={password}
-              setPassword={setPassword}
-              />
+              setPassword={setPassword}/>
             </Route>
             <Route exact path='/register'>
               <Register 
@@ -102,7 +104,9 @@ return (
                 password={password}
                 setPassword={setPassword}
                 token={token}
-                setToken={setToken}/>
+                setToken={setToken}
+                confirmPassword={confirmPassword}
+                setConfirmPassword={setConfirmPassword}/>
             </Route> 
         </div>
   </main>

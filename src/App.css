@@ -60,10 +60,16 @@
     color: rgb(43, 19, 120);
 }
 
-.Logout {
-    padding-left: 475px;
-    padding-top: 70px;
-    font-size: 10pt;
-    text-decoration: underline;
-    color: white;
+.login-fail {
+    font-family: 'Times New Roman', Times, serif;
+    color: red;
+    font-size: 18pt;
+}
+
+#logout {
+    background-color: rgb(43, 19, 120);
+    color: rgb(187, 182, 201);
+    font-family: 'Times New Roman', Times, serif;
+    height: 40px;
+    width: 80px;
 }
