@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 import { Register } from './Register.js';
 import { LoginFunc } from './Login.js';
 import { useEffect, useState } from 'react';
-import { BASE_URL } from './fetches.js';
+import { BASE_URL, makePost } from './fetches.js';
 import { Profile, Post } from './Profile'
 
 
@@ -48,8 +48,9 @@ useEffect (() => {
 }, [])
 // second argument of an empty array will prevent an infinite loop and only change when a list item is updated
 return (
+  <main>
     <BrowserRouter>
-    <main>
+    
     <div className="App">
       <h1>Stranger's Things</h1>
     </div>
@@ -58,12 +59,12 @@ return (
           <Link id="navRegister" to='/Register'>REGISTER</Link>
           <Link id="navLogin" to='/Login'>LOG IN</Link>
         </div>
+        
         <div>
             <Route exact path='/home'>
-              <div>
-                <h2>Register or Log in to Create a Post</h2>
-              </div>
-            { // this section breaks out of react into js
+                {isLoggedIn ? <button>Make a New Post</button> : <h2>Please Register or Log In to Sell an Item!</h2>}
+
+              { // this section breaks out of react into js
                 //the (post. could be called anything as long as it matches the following
                 //.title, .id, .description etc, but posts.map has to match the
                 //hard-coded key in the object being mapped over
@@ -77,11 +78,11 @@ return (
                    }
             <Home />
             </Route>
-            
-            
+              </div>
+
             {/* <Route exact path='/post'> */}
             <Route exact path='/profile'>
-              <Profile/>
+              <Profile />
              { <button id="logout">Log Out</button> }
             <div>
             <Link id="navProfile" to='/profile'>PROFILE</Link>
@@ -97,6 +98,7 @@ return (
               password={password}
               setPassword={setPassword}/>
             </Route>
+            
             <Route exact path='/register'>
               <Register 
                 username={username}
@@ -108,11 +110,9 @@ return (
                 confirmPassword={confirmPassword}
                 setConfirmPassword={setConfirmPassword}/>
             </Route> 
-        </div>
-  </main>
   </BrowserRouter>
+  </main>
   );
 }
-
 
 export default App;

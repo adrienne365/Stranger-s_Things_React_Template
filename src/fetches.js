@@ -71,6 +71,7 @@ const NewUser = async (username, password) => {
   }
 
   const makePost = async () => {
+    // localStorage.setItem("authenticated", true);
     try {
       const response = await fetch(`${BASE_URL}users/posts`, {
         method: "POST",
@@ -87,7 +88,7 @@ const NewUser = async (username, password) => {
           }
         })
       });
-      const result = await response.json();
+      const result = await response.json()
       console.log(result);
       return result
     } catch (err) {

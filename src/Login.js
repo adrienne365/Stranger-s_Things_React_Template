@@ -15,7 +15,7 @@ export const LoginFunc= () => {
           setAuthenticated(true)
           setIsLoggedIn(true)
           localStorage.setItem("authenticated", true);
-
+          console.log("logged in")
       }
     };
     

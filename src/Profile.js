@@ -1,3 +1,5 @@
+
+
 export const Profile= (props) => {
     return (
       <div className="profile">
@@ -13,3 +15,5 @@ export const Post= (props) => {
       </div>
     )
   }
+
+  
