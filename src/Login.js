@@ -9,7 +9,7 @@ export const LoginFunc= () => {
     const users = [{ username, password }];
     const handleLogin = (event) => {
       event.preventDefault(event)
-     login (username, password, authenticated); 
+     login (username, password, authenticated, isLoggedIn); 
       const account = users.find((user) => user.username === username);
       if (account && account.password === password) {
           setAuthenticated(true)
