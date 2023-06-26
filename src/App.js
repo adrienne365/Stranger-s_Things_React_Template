@@ -5,7 +5,7 @@ import { LoginFunc } from './Login.js';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from './fetches.js';
 import { Profile, Post } from './Profile.js'
-import { makePost } from './NewPosts.js';
+import { MakePost } from './NewPosts.js';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -65,20 +65,12 @@ function App() {
 
         <div>
           <Route exact path='/home'>
-            {isLoggedIn ? [<button>Make a New Post</button>,
+            {isLoggedIn ? [<Link to='/newpost'><button>Make a New Post</button></Link>,
             <Link id="navMyPosts" to='/myPosts'>MY POSTS</Link>,
             <Link id="navAllPosts" to='/allPosts'>ALL POSTS</Link>,
             <Link id="navProfile" to='/profile'>PROFILE</Link>,
             <button id="logout">Log Out</button>]
               : <h2>Please Register or Log In to Sell an Item!</h2>}
-
-            <makePost
-              newPost={newPost}
-              setNewPost={setNewPost}
-              price={price}
-              setPrice={setPrice}
-              description={description}
-              setDescription={setDescription}/>
 
             { // this section breaks out of react into js
               //the (post. could be called anything as long as it matches the following
@@ -94,8 +86,19 @@ function App() {
               })
             }
             <Home />
-          </Route>
+            </Route>
         </div>
+
+        <Route exact path='/newpost'>
+            <MakePost
+              newPost={newPost}
+              setNewPost={setNewPost}
+              price={price}
+              setPrice={setPrice}
+              description={description}
+              setDescription={setDescription}/>
+              </Route>
+
 
         {/* <Route exact path='/post'> */}
         <Route exact path='/profile'>

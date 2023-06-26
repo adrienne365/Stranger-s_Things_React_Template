@@ -54,6 +54,32 @@ const NewUser = async (username, password) => {
     }
   }
 
+  const createPost = async (name, price, description, newPost) => {
+    try {
+      const response = await fetch(`${BASE_URL}/users/newpost`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+            post: {
+               name: {name},
+               description: {description},
+               price: {price},
+               newPost: {newPost}
+          }
+        })
+      });
+      const result = await response.json();
+      console.log(result);
+      return result
+    } catch (err) {
+      alert(err.error.message);
+      console.error(err);
+    }
+  }
+
   const myData = async () => {
     try {
       const response = await fetch(`${BASE_URL}/users/me`, {
@@ -71,6 +97,7 @@ const NewUser = async (username, password) => {
   }
   
   export { NewUser };
+  export { createPost };
   export { login };
   export { myData };
   export { BASE_URL };
