@@ -1,11 +1,13 @@
 import "./App.css";
-import { BrowserRouter, Route, Link } from 'react-router-dom';
-import { Register } from './Register.js';
-import { LoginFunc } from './Login.js';
-import { useEffect, useState } from 'react';
-import { BASE_URL } from './fetches.js';
-import { Profile, Post } from './Profile.js'
-import { MakePost } from './NewPosts.js';
+import { BrowserRouter, Route, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Register } from "./Register.js";
+import { LoginFunc } from "./Login.js";
+import { BASE_URL } from "./fetches.js";
+import { Profile } from "./Profile.js";
+import { NewPostFunc } from "./NewPosts.js";
+import { CreateMessageFunc } from "./Messages.js";
+
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -13,10 +15,10 @@ function App() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [token, setToken] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [newPost, setNewPost] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [subject, setSubject] = useState("");
+  const [content, setContent] = useState("");
+
 
   const Home = (props) => {
     const [authenticated, setAuthenticated] = useState(null);
@@ -29,94 +31,105 @@ function App() {
     }, []);
 
     if (!authenticated) {
-      return < Link replace to="/login" />;
+      return <Link replace to="/Login" />;
     } else {
       return (
         <div className="home">
-          <h2>Welcome Home!</h2>
         </div>
-      )
+      );
     }
-  }
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
       const resp = await fetch(`${BASE_URL}/posts`);
       const response = await resp.json();
-      console.log(response)
       setPosts(response.data.posts);
-      //setPosts is a JS function with the posts being passed in
-    }
+    };
     fetchPosts();
-  }, [])
-  // second argument of an empty array will prevent an infinite loop and only change when a list item is updated
+  }, []);
+  
   return (
     <main>
       <BrowserRouter>
-
         <div className="App">
           <h1>Stranger's Things</h1>
         </div>
         <div className="Navbar">
-          <Link id="navHome" to='/home'>HOME</Link>
-          <Link id="navRegister" to='/Register'>REGISTER</Link>
-          <Link id="navLogin" to='/Login'>LOG IN</Link>
+          <Link id="navHome" to="/home">
+            Home
+          </Link>
+          <Link id="navRegister" to="/Register">
+            Register
+          </Link>
+          <Link id="navLogin" to="/Login">
+            Log In
+          </Link>
         </div>
 
         <div>
-          <Route exact path='/home'>
-            {isLoggedIn ? [<Link to='/newpost'><button>Make a New Post</button></Link>,
-            <Link id="navMyPosts" to='/myPosts'>MY POSTS</Link>,
-            <Link id="navAllPosts" to='/allPosts'>ALL POSTS</Link>,
-            <Link id="navProfile" to='/profile'>PROFILE</Link>,
-            <button id="logout">Log Out</button>]
-              : <h2>Please Register or Log In to Sell an Item!</h2>}
+          <Route exact path="/home">
+            <h2>All Sale Posts</h2>
+            {isLoggedIn ? (
+              [
+                <Link to="/newpost">
+                  <button>Make a New Post</button></Link>,
 
-            { // this section breaks out of react into js
-              //the (post. could be called anything as long as it matches the following
-              //.title, .id, .description etc, but posts.map has to match the
-              //hard-coded key in the object being mapped over
-              posts.map(post => {
-                return (<div key={post._id}>
-                  <h3>{post.title}</h3>
-                  <div>{post.description}</div>
-                  <div>{post.price}</div>
-                </div>
-                )
+                <Link to="/Profile">Your Profile</Link>,
+                <Link to="/Messages">Your Messages</Link>,
+                  <button id="logout">Log Out</button>,
+              ]
+            ) : (
+              <h2>Please Register or Log In to Sell an Item!</h2>
+            )}    
+      
+            { posts.map((post) => {
+                return (
+                  <div key={post._id}>
+                    <h3>{post.title}</h3>
+                    <div>{post.description}</div>
+                    <div>{post.price}</div>
+                  </div>
+                );
               })
             }
             <Home />
-            </Route>
+          </Route>
         </div>
 
-        <Route exact path='/newpost'>
-            <MakePost
-              newPost={newPost}
-              setNewPost={setNewPost}
-              price={price}
-              setPrice={setPrice}
-              description={description}
-              setDescription={setDescription}/>
-              </Route>
-
-
-        {/* <Route exact path='/post'> */}
-        <Route exact path='/profile'>
-          <Profile />
-
-          {/* <Post /> */}
+        <Route exact path="/newpost">
+          <NewPostFunc
+            posts={posts}
+            setPosts={setPosts}
+          />
         </Route>
 
-        <Route exact path='/login'>
-          {/* //passing in username and set username same w props to login function */}
+        <Route exact path="/Profile">
+          <Profile 
+          />
+        </Route>
+
+        <Route exact path="/Messages">
+          <CreateMessageFunc
+            subject={subject}
+            setSubject={setSubject}
+            content={content}
+            setContent={setContent}
+            username={username}
+          />
+        </Route>
+
+        <Route exact path="/Login">
+          
           <LoginFunc
             username={username}
             setUsername={setUsername}
             password={password}
-            setPassword={setPassword} />
+            setPassword={setPassword}
+          />
         </Route>
 
-        <Route exact path='/register'>
+        <Route exact path="/Register">
           <Register
             username={username}
             setUsername={setUsername}
@@ -125,7 +138,8 @@ function App() {
             token={token}
             setToken={setToken}
             confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword} />
+            setConfirmPassword={setConfirmPassword}
+          />
         </Route>
       </BrowserRouter>
     </main>
